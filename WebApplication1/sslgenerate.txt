@@ -1,0 +1,10 @@
+#self signed certificate generation commands
+
+
+openssl genrsa -des3 -out localhost.key 2048
+openssl req -key localhost.key -new -out localhost.csr
+openssl x509 -signkey localhost.key -in localhost.csr -req -days 365 -out localhost.crt
+openssl req -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout localhostCA.key -out localhostCA.crt
+openssl x509 -req -CA localhostCA.crt -CAkey localhostCA.key -in localhost.csr -out localhost.crt -days 365 -CAcreateserial -extfile domain.ext
+openssl x509 -text -noout -in localhost.crt
+openssl pkcs12 -inkey localhost.key -in localhost.crt -export -out localhost.pfx
